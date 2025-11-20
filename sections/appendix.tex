@@ -1,0 +1,62 @@
+\section{Implementation Details}
+\label{sec:appendix}
+
+\subsection{Arithmetic Coding Pseudocode}
+
+\subsubsection{Encoding Algorithm}
+\begin{algorithm}
+\caption{Arithmetic Encoding}
+\begin{algorithmic}
+\STATE $L \leftarrow 0$, $H \leftarrow 1$
+\STATE $pending \leftarrow 0$
+\FOR{each symbol $s$ in input}
+    \STATE $range \leftarrow H - L$
+    \STATE $H \leftarrow L + range \times P_{high}(s)$
+    \STATE $L \leftarrow L + range \times P_{low}(s)$
+    \WHILE{$H < 0.5$ OR $L \geq 0.5$}
+        \IF{$H < 0.5$}
+            \STATE Output 0
+            \STATE Output $pending$ ones
+            \STATE $pending \leftarrow 0$
+        \ELSIF{$L \geq 0.5$}
+            \STATE Output 1
+            \STATE Output $pending$ zeros
+            \STATE $pending \leftarrow 0$
+            \STATE $L \leftarrow L - 0.5$
+            \STATE $H \leftarrow H - 0.5$
+        \ENDIF
+        \STATE $L \leftarrow 2L$
+        \STATE $H \leftarrow 2H$
+    \ENDWHILE
+    \WHILE{$L \geq 0.25$ AND $H < 0.75$}
+        \STATE $pending \leftarrow pending + 1$
+        \STATE $L \leftarrow 2(L - 0.25)$
+        \STATE $H \leftarrow 2(H - 0.25)$
+    \ENDWHILE
+    \STATE Update probability model with symbol $s$
+\ENDFOR
+\end{algorithmic}
+\end{algorithm}
+
+\subsection{Model Parameters}
+\begin{table}[h]
+\centering
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Parameter} & \textbf{Value} \\ \hline
+Arithmetic precision & 32-bit fixed point \\ \hline
+Markov smoothing & Laplace ($\alpha = 1$) \\ \hline
+LSTM hidden units & 256 \\ \hline
+LSTM learning rate & 0.001 \\ \hline
+FSM number of states & 8-16 (data dependent) \\ \hline
+\end{tabular}
+\caption{Model hyperparameters used in experiments.}
+\end{table}
+
+\subsection{Dataset Details}
+% Detailed information about each dataset
+[To be filled with specific dataset information, file sizes, sources, etc.]
+
+\subsection{Additional Results}
+% Supplementary tables and figures that don't fit in main text
+[To be filled with additional experimental data]

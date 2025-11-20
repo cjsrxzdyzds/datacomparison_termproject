@@ -1,0 +1,28 @@
+\section{Introduction}
+\label{sec:introduction}
+
+% Context and background
+Arithmetic coding is a powerful entropy coding technique that can achieve near-optimal compression when paired with an accurate probability model. Unlike Huffman coding, which assigns an integral number of bits to each symbol, arithmetic coding can assign fractional bits, making it particularly effective when combined with adaptive probability models.
+
+% Problem statement
+However, the choice of probability model significantly impacts compression performance. Simple models like zero-order or first-order Markov models are computationally efficient but may fail to capture complex patterns in the data. More sophisticated models, such as higher-order Markov chains or neural networks, can potentially achieve better compression but at the cost of increased computational complexity and memory usage.
+
+% Research questions
+This research addresses the following key questions:
+\begin{enumerate}
+    \item How does model complexity affect compression ratio and computational cost?
+    \item Which probability models are most effective for different types of data?
+    \item What are the practical trade-offs between compression quality and resource requirements?
+\end{enumerate}
+
+% Contributions
+Our main contributions include:
+\begin{itemize}
+    \item A unified implementation framework for comparing diverse probability models with arithmetic coding
+    \item Comprehensive empirical evaluation across multiple data types and model complexities
+    \item Quantitative analysis of the compression-complexity trade-off
+    \item Practical recommendations for model selection based on application requirements
+\end{itemize}
+
+% Paper organization
+The remainder of this paper is organized as follows: Section~\ref{sec:background} reviews related work and theoretical foundations. Section~\ref{sec:methodology} describes our implementation of arithmetic coding and probability models. Section~\ref{sec:experimental_setup} details the experimental design and datasets. Section~\ref{sec:results} presents our findings. Section~\ref{sec:discussion} analyzes the results and their implications. Finally, Section~\ref{sec:conclusion} concludes and suggests future work.

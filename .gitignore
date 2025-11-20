@@ -1,0 +1,49 @@
+# LaTeX build artifacts
+*.aux
+*.log
+*.out
+*.toc
+*.bbl
+*.blg
+*.synctex.gz
+*.fls
+*.fdb_latexmk
+*.nav
+*.snm
+*.vrb
+*.lof
+*.lot
+*.idx
+*.ind
+*.ilg
+*.glo
+*.gls
+*.xdy
+*.acn
+*.acr
+*.alg
+
+# Build directory
+build/
+
+# Generated PDF (optional - uncomment if you don't want to track PDFs)
+# *.pdf
+
+# OS specific files
+.DS_Store
+Thumbs.db
+
+# Editor specific files
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+
+# MATLAB specific
+*.asv
+*.m~
+
+# Temporary files
+*.tmp
+*.bak

@@ -1,0 +1,112 @@
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{cite}
+\usepackage{booktabs}
+\usepackage{enumitem}
+
+\title{CSCI 6351 Data Compression\\
+\Large Term Project Proposal:\\
+Comparative Analysis of Probability Models for Arithmetic Coding}
+\author{Oscar Fang\\G42568236}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{Project Overview}
+
+\subsection{What: Comparative Analysis of Probability Models for Arithmetic Coding}
+
+This project will implement and compare different probability models used with arithmetic coding for data compression. Specifically, I will evaluate:
+
+\begin{itemize}[noitemsep]
+    \item \textbf{Markov Models:} 1st, 2nd, and 3rd order models that predict symbols based on previous context
+    \item \textbf{Finite State Machine (FSM) Models:} State-based models that adapt to patterns like runs of symbols
+    \item \textbf{Neural Network Models:} RNN/LSTM-based predictors that learn complex dependencies
+\end{itemize}
+
+Each model will be integrated with an arithmetic coder implemented in MATLAB and tested on diverse datasets including text files, binary data, and structured sequences (e.g., DNA).
+
+\subsection{Why: Motivation and Objectives}
+
+Arithmetic coding can achieve near-optimal compression when paired with an accurate probability model. However, different models have different strengths:
+
+\begin{itemize}[noitemsep]
+    \item Simple models (1st order Markov) are fast but may miss patterns
+    \item Complex models (3rd order, neural networks) can capture more dependencies but require more memory and computation
+    \item Specialized models (FSM) may excel on specific data types
+\end{itemize}
+
+\textbf{Key Questions:}
+\begin{enumerate}[noitemsep]
+    \item How does model complexity affect compression ratio and speed?
+    \item Which models work best for different data types?
+    \item What are the practical trade-offs between compression quality and computational cost?
+\end{enumerate}
+
+\textbf{Expected Outcomes:}
+\begin{itemize}[noitemsep]
+    \item Quantitative comparison of compression performance across models and datasets
+    \item Analysis of memory usage, encoding/decoding time, and compression ratios
+    \item Practical guidelines for choosing models based on application requirements
+    \item Open-source MATLAB implementation for educational use
+\end{itemize}
+
+\subsection{How: Implementation Approach}
+
+All models will be implemented in MATLAB with a common arithmetic coding framework:
+
+\begin{enumerate}[noitemsep]
+    \item \textbf{Arithmetic Coder:} Base encoder/decoder with interval arithmetic and E1/E2/E3 scaling
+    \item \textbf{Probability Models:} Each model provides probability distributions for the next symbol given context
+    \item \textbf{Adaptive Updates:} Models update as data is processed (online learning)
+\end{enumerate}
+
+\textbf{Datasets:}
+\begin{itemize}[noitemsep]
+    \item Text: English text, source code (10KB - 1MB files)
+    \item Binary: Executable files, images
+    \item Structured: DNA sequences
+\end{itemize}
+
+\textbf{Evaluation Metrics:}
+\begin{itemize}[noitemsep]
+    \item Compression ratio (compressed size / original size)
+    \item Encoding and decoding time
+    \item Memory usage
+    \item Comparison against baselines (Huffman, gzip, entropy)
+\end{itemize}
+
+\section{Timeline and Deliverables}
+
+\subsection{Timeline}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Week} & \textbf{Tasks} \\ \hline
+1 & Implement arithmetic coder and 1st/2nd order Markov models \\ \hline
+2 & Implement 3rd order Markov and FSM models \\ \hline
+3 & Implement neural network models and run experiments \\ \hline
+4 & Analyze results and write final report \\ \hline
+\end{tabular}
+\end{table}
+
+\subsection{Deliverables}
+
+\begin{enumerate}[noitemsep]
+    \item Unified comparison of traditional and neural probability models for arithmetic coding
+    \item Quantitative analysis of compression-complexity trade-offs
+    \item Practical recommendations for model selection
+    \item Educational MATLAB implementation with documentation
+\end{enumerate}
+
+\end{document}

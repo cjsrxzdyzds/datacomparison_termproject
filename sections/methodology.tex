@@ -1,0 +1,71 @@
+\section{Methodology}
+\label{sec:methodology}
+
+This section describes our implementation of arithmetic coding and the probability models evaluated in this study.
+
+\subsection{Arithmetic Coding Framework}
+
+\subsubsection{Encoder}
+% Describe encoding algorithm
+Our arithmetic encoder maintains an interval $[L, H)$ initialized to $[0, 1)$. For each symbol $s$ with cumulative probability range $[P_{\text{low}}(s), P_{\text{high}}(s))$, the interval is updated as:
+\begin{align}
+    \text{range} &= H - L \\
+    H' &= L + \text{range} \times P_{\text{high}}(s) \\
+    L' &= L + \text{range} \times P_{\text{low}}(s)
+\end{align}
+
+% Scaling operations
+To prevent underflow, we implement E1, E2, and E3 scaling:
+\begin{itemize}
+    \item \textbf{E1 scaling}: When $H < 0.5$, output 0 and rescale
+    \item \textbf{E2 scaling}: When $L \geq 0.5$, output 1 and rescale
+    \item \textbf{E3 scaling}: When $L \geq 0.25$ and $H < 0.75$, track convergence
+\end{itemize}
+
+\subsubsection{Decoder}
+% Describe decoding algorithm
+The decoder maintains a value $v$ representing the encoded number and the same interval $[L, H)$. For each symbol, it determines which probability range contains $v$ and updates the interval accordingly.
+
+\subsection{Probability Models}
+
+\subsubsection{Markov Models}
+% Implementation details of order-1, 2, 3 Markov models
+We implement adaptive Markov models of orders 1, 2, and 3.
+\begin{itemize}
+    \item \textbf{Order-1}: Context is the previous symbol, requires $|\Sigma|^2$ counters. Implemented with a full 2D array.
+    \item \textbf{Order-2}: Context is the previous 2 symbols, requires $|\Sigma|^3$ counters. Implemented with a full 3D array.
+    \item \textbf{Order-3}: Context is the previous 3 symbols. Since a full table ($|\Sigma|^4$) is prohibitively large (~32GB), we implement a \textbf{sparse model} using a hash map (`containers.Map`). Only observed contexts are stored, significantly reducing memory usage.
+\end{itemize}
+
+% Escape mechanism and smoothing
+To handle unseen contexts, we use an escape mechanism with Laplace smoothing: each context starts with count 1 for all symbols.
+
+\subsubsection{Finite State Machine Models}
+% Describe FSM model design
+Our FSM model is specifically designed to efficiently encode \textbf{run-length sequences}. It extends the Order-1 Markov model by adding a binary "Run State" to the context:
+\begin{itemize}
+    \item \textbf{Context}: $[s_{t-1}, \text{IsRun}]$
+    \item \textbf{IsRun}: True if $s_{t-1} == s_{t-2}$, else False.
+\end{itemize}
+This allows the model to maintain separate probability distributions for "normal" transitions versus "run" transitions, enabling it to quickly adapt to repeated symbols.
+
+\subsubsection{Neural Network Models}
+% Describe RNN/LSTM architecture
+We implement a custom \textbf{Simple Recurrent Neural Network (RNN)} from scratch in MATLAB to avoid the overhead of the Deep Learning Toolbox for symbol-by-symbol updates.
+\begin{itemize}
+    \item \textbf{Architecture}: Input layer (one-hot), Hidden layer (tanh activation), Output layer (Softmax).
+    \item \textbf{Training}: Online Stochastic Gradient Descent (SGD) with Backpropagation Through Time (BPTT) truncated to 1 step.
+    \item \textbf{Initialization}: Deterministic weight initialization using sinusoidal functions to ensure identical states for encoder and decoder.
+\end{itemize}
+The model updates its weights after every symbol, allowing it to adapt to the data stream in real-time.
+
+\subsection{Implementation Details}
+% MATLAB implementation specifics
+All models are implemented in MATLAB using object-oriented programming (handle classes) to maintain state across symbol processing. Key implementation features include:
+\begin{itemize}
+    \item \textbf{Arithmetic Coding}: Implemented using double-precision floating-point arithmetic with renormalization (E1, E2, E3 scaling) to maintain numerical stability.
+    \item \textbf{Data Structures}: Full multi-dimensional arrays are used for context tables in 1st and 2nd order Markov models, as the alphabet size ($|\Sigma|=256$) allows for direct indexing without excessive memory overhead for these orders.
+    \item \textbf{Modularity}: The system uses a polymorphic design where the arithmetic coder accepts any model object that implements the required \texttt{get\_range} and \texttt{update} methods.
+\end{itemize}
+
+The code is structured to allow easy swapping of probability models while maintaining the same arithmetic coding engine.

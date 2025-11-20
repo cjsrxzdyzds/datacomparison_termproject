@@ -1,0 +1,63 @@
+\section{Discussion}
+\label{sec:discussion}
+
+\subsection{Compression-Complexity Trade-off}
+% Analyze the fundamental trade-off
+Our results reveal a clear trade-off between compression performance and computational complexity. [Detailed analysis to be filled based on results]
+
+\subsubsection{Model Complexity vs. Compression Gain}
+Higher-order models generally achieve better compression, but with diminishing returns. For instance, [specific example from results].
+
+\subsubsection{Practical Implications}
+For applications with:
+\begin{itemize}
+    \item \textbf{Limited CPU}: First-order Markov or FSM models provide good balance
+    \item \textbf{High compression priority}: Third-order Markov or neural models
+    \item \textbf{Real-time requirements}: FSM models with specialized state machines
+\end{itemize}
+
+\subsection{Data Type Characteristics}
+
+\subsubsection{Text vs. Binary Data}
+Text data shows [pattern], while binary data exhibits [different pattern]. This suggests [explanation].
+
+\subsubsection{Structured Sequences}
+DNA and protein sequences benefit significantly from [specific model type] due to [biological/structural reason].
+
+\subsection{Model Selection Guidelines}
+Based on our experiments, we recommend:
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{Data Type} & \textbf{Priority} & \textbf{Recommended Model} \\ \hline
+Text & Speed & 1st order Markov \\ \hline
+Text & Compression & 3rd order Markov \\ \hline
+Binary & Balanced & FSM \\ \hline
+DNA & Compression & 2nd order Markov \\ \hline
+General & Adaptive & LSTM (if resources allow) \\ \hline
+\end{tabular}
+\caption{Model selection guidelines based on data type and priority.}
+\label{tab:guidelines}
+\end{table}
+
+\subsection{Limitations}
+
+\subsubsection{Implementation Constraints}
+Our MATLAB implementation may not reflect optimized C/C++ performance. [Discuss impact]
+
+\subsubsection{Dataset Coverage}
+While we tested diverse data types, [limitations in scope].
+
+\subsubsection{Neural Model Training}
+Online training of neural models during compression presents challenges: [discuss challenges and how they were addressed].
+
+\subsection{Future Work}
+Promising directions for future research include:
+\begin{itemize}
+    \item Hybrid models combining Markov and neural approaches
+    \item Context mixing techniques to leverage multiple models
+    \item Hardware acceleration for neural probability models
+    \item Adaptive model selection that switches based on data characteristics
+\end{itemize}

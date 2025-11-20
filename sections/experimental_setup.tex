@@ -1,0 +1,69 @@
+\section{Experimental Setup}
+\label{sec:experimental_setup}
+
+\subsection{Datasets}
+We evaluate all models on three categories of data to assess performance across different characteristics:
+
+\subsubsection{Text Data}
+\begin{itemize}
+    \item \textbf{English text}: Project Gutenberg books (100KB - 1MB)
+    \item \textbf{Source code}: Python, Java, and C++ files (10KB - 500KB)
+    \item \textbf{XML/JSON}: Structured text with repetitive tags
+\end{itemize}
+
+\subsubsection{Binary Data}
+\begin{itemize}
+    \item \textbf{Executable files}: Compiled binaries (.exe, .dll)
+    \item \textbf{Images}: BMP format (uncompressed)
+    \item \textbf{Audio}: WAV files (raw PCM data)
+\end{itemize}
+
+\subsubsection{Structured Sequences}
+\begin{itemize}
+    \item \textbf{DNA sequences}: Human genome segments from NCBI
+    \item \textbf{Protein sequences}: Amino acid sequences
+\end{itemize}
+
+\subsection{Evaluation Metrics}
+
+\subsubsection{Compression Performance}
+\begin{itemize}
+    \item \textbf{Compression ratio}: $\frac{\text{compressed size}}{\text{original size}}$
+    \item \textbf{Bits per symbol}: $\frac{\text{compressed size in bits}}{\text{number of symbols}}$
+    \item \textbf{Compression gain}: Comparison against zero-order entropy and Huffman coding
+\end{itemize}
+
+\subsubsection{Computational Cost}
+\begin{itemize}
+    \item \textbf{Encoding time}: Wall-clock time to compress data
+    \item \textbf{Decoding time}: Wall-clock time to decompress data
+    \item \textbf{Memory usage}: Peak RAM consumption during encoding
+\end{itemize}
+
+\subsubsection{Baseline Comparisons}
+We compare against:
+\begin{itemize}
+    \item Zero-order entropy (theoretical lower bound assuming i.i.d. symbols)
+    \item Huffman coding with adaptive frequencies
+    \item gzip (DEFLATE algorithm)
+    \item bzip2 (Burrows-Wheeler transform with Huffman coding)
+\end{itemize}
+
+\subsection{Experimental Procedure}
+For each dataset and model combination:
+\begin{enumerate}
+    \item Initialize the model with uniform probabilities
+    \item Encode the file symbol-by-symbol, updating model adaptively
+    \item Record compressed size and encoding time
+    \item Decode the compressed file to verify correctness
+    \item Record decoding time and peak memory usage
+    \item Repeat for 3 trials and report mean and standard deviation
+\end{enumerate}
+
+\subsection{Hardware and Software}
+\begin{itemize}
+    \item \textbf{Processor}: Apple M-Series (ARM64)
+    \item \textbf{RAM}: 16 GB Unified Memory
+    \item \textbf{Operating System}: macOS Sequoia 15.1
+    \item \textbf{Software}: MATLAB R2025a
+\end{itemize}

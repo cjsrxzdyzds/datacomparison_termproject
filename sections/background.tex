@@ -1,0 +1,44 @@
+\section{Background and Related Work}
+\label{sec:background}
+
+\subsection{Arithmetic Coding}
+% Brief overview of arithmetic coding principles
+Arithmetic coding \cite{rissanen1979arithmetic, witten1987arithmetic} represents a sequence of symbols as a single floating-point number in the interval $[0, 1)$. The key advantages include:
+\begin{itemize}
+    \item Near-optimal compression (approaches entropy limit)
+    \item Seamless integration with adaptive probability models
+    \item No requirement for integral bit assignments
+\end{itemize}
+
+% Technical details
+The encoding process maintains an interval $[L, H)$ that narrows as each symbol is processed. To avoid numerical underflow, practical implementations use techniques such as E1, E2, and E3 scaling operations.
+
+\subsection{Probability Models}
+
+\subsubsection{Markov Models}
+% Discuss order-k Markov models
+Order-$k$ Markov models predict the next symbol based on the previous $k$ symbols (context). While higher-order models can capture longer dependencies, they suffer from:
+\begin{itemize}
+    \item Exponential growth in memory requirements: $O(|\Sigma|^{k+1})$ where $|\Sigma|$ is alphabet size
+    \item Context dilution problem: many contexts appear infrequently in training data
+\end{itemize}
+
+\subsubsection{Finite State Machine Models}
+% Discuss FSM-based approaches
+FSM models maintain internal states that evolve based on input symbols. They can efficiently capture patterns like runs of repeated symbols or alternating sequences without requiring large context tables.
+
+\subsubsection{Neural Network Models}
+% Recent work on neural compression
+Recent advances in neural compression \cite{neural1, neural2} use recurrent neural networks (RNNs) and Long Short-Term Memory (LSTM) networks to learn complex probability distributions. These models can potentially capture long-range dependencies but require significant computational resources.
+
+\subsection{Related Work}
+% Survey of existing comparative studies
+Previous comparative studies have examined:
+\begin{itemize}
+    \item PPM (Prediction by Partial Matching) variants \cite{cleary1984data}
+    \item Context mixing approaches \cite{mahoney2005adaptive}
+    \item Neural compression techniques \cite{schrittwieser2023online}
+\end{itemize}
+
+% Gap that this work addresses
+However, few studies provide a unified comparison across traditional statistical models and modern neural approaches within the same arithmetic coding framework. This work fills that gap by implementing diverse models in a common testbed and evaluating them on consistent benchmarks.

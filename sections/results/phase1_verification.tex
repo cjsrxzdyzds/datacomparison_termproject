@@ -1,0 +1,18 @@
+\subsection{Phase 1 Verification}
+We verified the correctness of our arithmetic coding implementation and basic Markov models using a short test string ("hello world! this is a test string for arithmetic coding."). The results confirm lossless compression and expected behavior for adaptive models.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lccc}
+\toprule
+\textbf{Model} & \textbf{Original Bits} & \textbf{Compressed Bits} & \textbf{Bits Per Symbol} \\
+\midrule
+1st Order Markov & 456 & 447 & 7.84 \\
+2nd Order Markov & 456 & 455 & 7.98 \\
+\bottomrule
+\end{tabular}
+\caption{Phase 1 verification results on a 57-byte test string.}
+\label{tab:phase1_verification}
+\end{table}
+
+Both models achieved a compression ratio slightly below 8 bits/symbol, which is expected for such a short string where the overhead of adaptive model initialization (Laplace smoothing) is significant relative to the data size. The 1st order model performed slightly better than the 2nd order model in this limited context, likely due to the sparsity of the 2nd order context in a short sequence.
