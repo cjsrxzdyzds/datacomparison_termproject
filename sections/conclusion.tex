@@ -6,9 +6,10 @@ This paper presented a comprehensive comparative analysis of probability models 
 \subsection{Key Findings}
 Our experimental results demonstrate:
 \begin{enumerate}
-    \item \textbf{Model complexity matters, but with diminishing returns}: Higher-order models improve compression, but the gain decreases relative to increased computational cost
-    \item \textbf{Data type influences model effectiveness}: Different models excel on different data types, with no single model dominating across all benchmarks
-    \item \textbf{Practical trade-offs exist}: The choice of model should balance compression performance, speed, and memory requirements based on application constraints
+    \item \textbf{Higher-order models excel on text}: The 3rd Order Markov model achieved the best compression ratio on English text, validating the importance of context.
+    \item \textbf{RNNs show promise}: The simple RNN implementation was competitive with Markov models and outperformed the FSM on text, suggesting that neural approaches can capture complex dependencies.
+    \item \textbf{Precision matters for binary data}: We identified that standard floating-point arithmetic coding can struggle with the high-entropy nature of binary data, requiring higher precision (52-bit) to avoid decoding errors.
+    \item \textbf{Trade-offs are unavoidable}: The best compressing models were also the slowest, confirming the fundamental trade-off between compression efficiency and computational complexity.
 \end{enumerate}
 
 \subsection{Practical Contributions}

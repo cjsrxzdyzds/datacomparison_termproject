@@ -156,28 +156,28 @@ This roadmap breaks down the project into manageable phases to ensure timely com
     - [x] Implement `model_lstm.m` (or hybrid Python approach if necessary)
 
 ### Phase 3: Experiments & Analysis (Week 3)
-- [ ] **Data Collection**
-    - [ ] Gather Text datasets (English, Code)
-    - [ ] Gather Binary datasets (Exe, Images)
-    - [ ] Gather Structured datasets (DNA)
-- [ ] **Benchmarking**
-    - [ ] Run compression ratio tests
-    - [ ] Measure encoding/decoding time
-    - [ ] Measure memory usage
-- [ ] **Analysis**
-    - [ ] Generate comparison tables (LaTeX format)
-    - [ ] Generate performance plots (MATLAB figures)
+- [x] **Data Collection**
+    - [x] Gather Text datasets (English, Code)
+    - [x] Gather Binary datasets (Exe, Images)
+    - [x] Gather Structured datasets (DNA)
+- [x] **Benchmarking**
+    - [x] Run compression ratio tests
+    - [x] Measure encoding/decoding time
+    - [x] Measure memory usage
+- [x] **Analysis**
+    - [x] Generate comparison tables (LaTeX format)
+    - [x] Generate performance plots (MATLAB figures)
 
 ### Phase 4: Report & Finalization (Week 4)
-- [ ] **Writing**
-    - [ ] Abstract & Introduction
-    - [ ] Methodology (Model descriptions)
-    - [ ] Experimental Setup
-    - [ ] Results & Discussion
-    - [ ] Conclusion
-- [ ] **Final Polish**
-    - [ ] Verify all references
-    - [ ] Final PDF build
+- [x] **Writing**
+    - [x] Abstract & Introduction
+    - [x] Methodology (Model descriptions)
+    - [x] Experimental Setup
+    - [x] Results & Discussion
+    - [x] Conclusion
+- [x] **Final Polish**
+    - [x] Verify all references
+    - [x] Final PDF build
 
 ## Report Writing Plan
 
@@ -187,23 +187,23 @@ This plan details when each section of the final report will be drafted and fina
 - [x] **Methodology**: Document Arithmetic Coding implementation details.
 - [x] **Results**: Document Phase 1 verification results (correctness tests).
 
-### Phase 2: Advanced Models (Week 2)
-- [ ] **Methodology**: Update with descriptions of 3rd Order Markov, FSM, and Neural Network models.
-- [ ] **Background**: Draft literature review on probability models for arithmetic coding.
+### Phase 2: Advanced Models (Completed)
+- [x] **Methodology**: Update with descriptions of 3rd Order Markov, FSM, and Neural Network models.
+- [x] **Background**: Draft literature review on probability models for arithmetic coding.
 
-### Phase 3: Experiments (Week 3)
-- [ ] **Experimental Setup**: Finalize dataset descriptions and evaluation metrics.
-- [ ] **Results**:
-    - [ ] Draft "Compression Performance" section with initial plots.
-    - [ ] Draft "Computational Performance" section (time/memory).
-- [ ] **Discussion**: Initial analysis of trade-offs (Complexity vs. Compression).
+### Phase 3: Experiments (Completed)
+- [x] **Experimental Setup**: Finalize dataset descriptions and evaluation metrics.
+- [x] **Results**:
+    - [x] Draft "Compression Performance" section with initial plots.
+    - [x] Draft "Computational Performance" section (time/memory).
+- [x] **Discussion**: Initial analysis of trade-offs (Complexity vs. Compression).
 
-### Phase 4: Finalization (Week 4)
-- [ ] **Abstract**: Write final summary of the project.
-- [ ] **Introduction**: Finalize motivation and problem statement.
-- [ ] **Conclusion**: Summarize findings and future work.
-- [ ] **Results**: Finalize all tables and figures.
-- [ ] **Review**: Proofread and verify all citations.
+### Phase 4: Finalization (Completed)
+- [x] **Abstract**: Write final summary of the project.
+- [x] **Introduction**: Finalize motivation and problem statement.
+- [x] **Conclusion**: Summarize findings and future work.
+- [x] **Results**: Finalize all tables and figures.
+- [x] **Review**: Proofread and verify all citations.
 
 ## Deliverables & Checklist
 
@@ -215,18 +215,18 @@ This plan details when each section of the final report will be drafted and fina
     - [x] 3rd Order Markov
     - [x] FSM Model
     - [x] Neural/LSTM Model
-- [ ] **Scripts**:
-    - [ ] Data processing scripts
-    - [ ] Experiment runner scripts
-    - [ ] Plotting scripts
+- [x] **Scripts**:
+    - [x] Data processing scripts
+    - [x] Experiment runner scripts
+    - [x] Plotting scripts
 
 ### Report Deliverables
-- [ ] **Final Report (PDF)**: `main.pdf`
-- [ ] **Source Code**: Cleaned and commented .m files
-- [ ] **Results**:
-    - [ ] Comparison Table: Compression Ratios
-    - [ ] Comparison Table: Execution Time
-    - [ ] Plot: Compression Performance vs. Model Complexity
+- [x] **Final Report (PDF)**: `main.pdf`
+- [x] **Source Code**: Cleaned and commented .m files
+- [x] **Results**:
+    - [x] Comparison Table: Compression Ratios
+    - [x] Comparison Table: Execution Time
+    - [x] Plot: Compression Performance vs. Model Complexity
 
 ### Coding Standards
 **Important**: All MATLAB scripts (`.m` files) must include the following header:

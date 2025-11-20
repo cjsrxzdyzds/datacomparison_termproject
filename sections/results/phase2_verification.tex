@@ -1,32 +1,39 @@
 \subsection{Phase 2 Verification}
-We extended our verification to include the advanced models implemented in Phase 2: the 3rd Order Markov Model (Sparse), the FSM Model (Run-Length), and the Simple RNN Model.
+We extended our verification to the advanced probability models implemented in Phase 2: 3rd Order Markov, Finite State Machine (FSM), and Recurrent Neural Network (RNN).
 
-\subsubsection{Test Results}
-The models were tested on specific sequences designed to highlight their strengths:
-\begin{itemize}
-    \item \textbf{Markov-3}: Tested on the standard text string.
-    \item \textbf{FSM}: Tested on a run-heavy string ("AAAAABBBBB...").
-    \item \textbf{RNN}: Tested on the standard text string.
-\end{itemize}
+\subsubsection{High-Order Markov and RNN Models}
+We tested the 3rd Order Markov and RNN models on the same test string as Phase 1.
 
 \begin{table}[h]
 \centering
-\begin{tabular}{lcccc}
+\begin{tabular}{lccc}
 \toprule
-\textbf{Model} & \textbf{Test Data} & \textbf{Original Bits} & \textbf{Compressed Bits} & \textbf{Bits/Symbol} \\
+\textbf{Model} & \textbf{Original Bits} & \textbf{Compressed Bits} & \textbf{Bits Per Symbol} \\
 \midrule
-Markov-3 (Sparse) & Text (57B) & 456 & 457 & 8.02 \\
-FSM (Run-Length) & Runs (30B) & 240 & 226 & 7.53 \\
-RNN (Simple) & Text (57B) & 456 & 443 & 7.77 \\
+3rd Order Markov & 456 & 457 & 8.02 \\
+RNN (Simple SRN) & 456 & 443 & 7.77 \\
 \bottomrule
 \end{tabular}
-\caption{Phase 2 verification results.}
+\caption{Phase 2 verification results on a 57-byte test string.}
 \label{tab:phase2_verification}
 \end{table}
 
-\subsubsection{Observations}
-\begin{itemize}
-    \item \textbf{Markov-3}: The sparse model performed slightly worse than lower-order models on the short text string (8.02 bps). This is expected due to the "sparse context" problem: with a short string, almost every 3-symbol context is unique, forcing the model to rely on the fallback/initialization (Laplace smoothing) which has high overhead. It requires more data to become effective.
-    \item \textbf{FSM}: The FSM model successfully compressed the run-heavy string (7.53 bps), demonstrating its ability to exploit run-length redundancy better than a standard model would on such short data.
-    \item \textbf{RNN}: The Simple RNN achieved 7.77 bps on the text string, outperforming the initialized Markov models. This suggests that even a simple neural network can quickly learn patterns in the data, although its computational cost is significantly higher.
-\end{itemize}
+The RNN model achieved the best compression ratio (7.77 bps) among all models on this short string, demonstrating its ability to quickly adapt even with limited data. The 3rd Order Markov model performed slightly worse (8.02 bps), which is expected as the context dilution problem is more pronounced with higher orders on short sequences.
+
+\subsubsection{FSM Model (Run-Length)}
+To verify the FSM model's ability to handle run-length sequences, we tested it on a synthetic string containing repeated characters ("AAAAABBBBB...").
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lccc}
+\toprule
+\textbf{Model} & \textbf{Original Bits} & \textbf{Compressed Bits} & \textbf{Bits Per Symbol} \\
+\midrule
+FSM Model & 240 & 226 & 7.53 \\
+\bottomrule
+\end{tabular}
+\caption{FSM verification on a run-length sequence (30 symbols).}
+\label{tab:fsm_verification}
+\end{table}
+
+The FSM model successfully compressed the run-length sequence to 7.53 bits/symbol, confirming its effectiveness in detecting and exploiting repeated patterns.

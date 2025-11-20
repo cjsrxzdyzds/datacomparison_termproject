@@ -10,16 +10,17 @@
 \end{table}
 
 % Analysis of text results
-% TODO: Uncomment and add figure when results are available
-% Figure~\ref{fig:text_bps} shows bits per symbol achieved by each model on English text.
-[Analysis to be filled based on results]
+% Analysis of text results
+Figure~\ref{fig:compression_performance} compares the compression efficiency (bits per symbol) across different models.
+The 3rd Order Markov model achieved the best compression on text data, but at the cost of significantly higher computational complexity.
+The RNN model showed competitive performance, outperforming the 1st Order Markov model and FSM on text data.
 
-% \begin{figure}[h]
-% \centering
-% \includegraphics[width=0.8\textwidth]{text_bps.pdf}
-% \caption{Bits per symbol for text data across different models.}
-% \label{fig:text_bps}
-% \end{figure}
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.8\textwidth]{images/compression_performance.png}
+\caption{Compression performance (Bits Per Symbol) across different models and datasets.}
+\label{fig:compression_performance}
+\end{figure}
 
 \subsubsection{Binary Data}
 % Similar structure for binary data

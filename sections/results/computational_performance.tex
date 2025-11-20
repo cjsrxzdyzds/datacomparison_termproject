@@ -1,16 +1,17 @@
 \subsection{Computational Performance}
 
 \subsubsection{Encoding and Decoding Time}
-% TODO: Uncomment and add figure when results are available
-% \begin{figure}[h]
-% \centering
-% \includegraphics[width=0.8\textwidth]{encoding_time.pdf}
-% \caption{Encoding time comparison across models.}
-% \label{fig:encoding_time}
-% \end{figure}
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.8\textwidth]{images/encoding_time.png}
+\caption{Encoding time comparison across models.}
+\label{fig:encoding_time}
+\end{figure}
 
 % Analysis
-[Analysis of time complexity trends to be filled]
+The encoding time results (Figure~\ref{fig:encoding_time}) highlight the trade-off between model complexity and speed.
+The 1st Order Markov and FSM models were the fastest, while the 3rd Order Markov and RNN models required significantly more time due to their complex state updates and, in the case of RNN, gradient descent steps.
+Notably, the sparse 3rd Order Markov model was slower than the RNN on some datasets, likely due to hash map overheads in MATLAB.
 
 \subsubsection{Memory Usage}
 \begin{table}[h]
