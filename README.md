@@ -157,9 +157,10 @@ This roadmap breaks down the project into manageable phases to ensure timely com
 
 ### Phase 3: Experiments & Analysis (Week 3)
 - [x] **Data Collection**
-    - [x] Gather Text datasets (English, Code)
-    - [x] Gather Binary datasets (Exe, Images)
-    - [x] Gather Structured datasets (DNA)
+    - [x] Run `python3 download_datasets.py` to fetch all datasets
+    - [x] Gather Text datasets (Canterbury Corpus: alice29.txt, etc.)
+    - [x] Gather Binary datasets (Canterbury Corpus: kennedy.xls, etc.)
+    - [x] Gather Structured datasets (Canterbury Corpus: genome sequences)
 - [x] **Benchmarking**
     - [x] Run compression ratio tests
     - [x] Measure encoding/decoding time
