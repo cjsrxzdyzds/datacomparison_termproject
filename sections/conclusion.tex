@@ -6,10 +6,10 @@ This paper presented a comprehensive comparative analysis of probability models 
 \subsection{Key Findings}
 Our experimental results demonstrate:
 \begin{enumerate}
-    \item \textbf{Higher-order models excel on text}: The 3rd Order Markov model achieved the best compression ratio on English text, validating the importance of context.
-    \item \textbf{RNNs show promise}: The simple RNN implementation was competitive with Markov models and outperformed the FSM on text, suggesting that neural approaches can capture complex dependencies.
+    \item \textbf{Neural models dominate compression}: The LSTM model achieved the best compression ratios on both text and binary data, outperforming traditional Markov models. This suggests that neural networks' ability to model continuous state spaces is superior for capturing complex dependencies.
+    \item \textbf{Context dilution limits high-order Markov}: The 3rd Order Markov model performed worse than expected due to data sparsity in our test files, highlighting a key limitation of discrete context tables.
     \item \textbf{Precision matters for binary data}: We identified that standard floating-point arithmetic coding can struggle with the high-entropy nature of binary data, requiring higher precision (52-bit) to avoid decoding errors.
-    \item \textbf{Trade-offs are unavoidable}: The best compressing models were also the slowest, confirming the fundamental trade-off between compression efficiency and computational complexity.
+    \item \textbf{Trade-offs are unavoidable}: The best compressing model (LSTM) was also the slowest by a large margin, confirming the fundamental trade-off between compression efficiency and computational complexity.
 \end{enumerate}
 
 \subsection{Practical Contributions}

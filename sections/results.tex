@@ -9,3 +9,24 @@ This section presents our experimental findings across different probability mod
 \input{sections/results/computational_performance}
 \input{sections/results/baseline_comparison}
 \input{sections/results/model_findings}
+
+\subsection{Scaling Analysis}
+To better understand how our models perform as data size increases, we analyzed the relationship between file size and both compression ratio and encoding time.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.8\textwidth]{images/size_vs_ratio.png}
+\caption{Impact of file size on compression ratio. Note the log scale on the x-axis.}
+\label{fig:size_vs_ratio}
+\end{figure}
+
+Figure~\ref{fig:size_vs_ratio} shows that compression ratios generally improve (decrease) as file size increases, particularly for adaptive models like the 3rd Order Markov, which benefit from observing more data to build accurate probability tables.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.8\textwidth]{images/size_vs_time.png}
+\caption{Encoding time vs. file size (log-log scale).}
+\label{fig:size_vs_time}
+\end{figure}
+
+Figure~\ref{fig:size_vs_time} illustrates the time complexity. The linear relationship on the log-log plot confirms that most models scale linearly with input size ($O(N)$), but with vastly different constants. The RNN and 3rd Order Markov models show a much steeper intercept, indicating high per-symbol processing costs.

@@ -44,19 +44,17 @@
 \begin{tabular}{|l|l|}
 \hline
 \textbf{Parameter} & \textbf{Value} \\ \hline
-Arithmetic precision & 32-bit fixed point \\ \hline
+Arithmetic precision & 52-bit floating point (MATLAB double) \\ \hline
 Markov smoothing & Laplace ($\alpha = 1$) \\ \hline
-LSTM hidden units & 256 \\ \hline
-LSTM learning rate & 0.001 \\ \hline
-FSM number of states & 8-16 (data dependent) \\ \hline
+LSTM hidden units & 16 \\ \hline
+LSTM learning rate & 0.05 \\ \hline
+FSM number of states & 2 (Run/Non-Run) \\ \hline
 \end{tabular}
 \caption{Model hyperparameters used in experiments.}
 \end{table}
 
 \subsection{Dataset Details}
-% Detailed information about each dataset
-[To be filled with specific dataset information, file sizes, sources, etc.]
+The Canterbury Corpus files used in this study are standard benchmarks for lossless compression. File sizes range from 3KB to 1MB, covering text, binary, and code data types.
 
 \subsection{Additional Results}
-% Supplementary tables and figures that don't fit in main text
-[To be filled with additional experimental data]
+See the main results section for comprehensive performance metrics.

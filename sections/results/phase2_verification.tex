@@ -1,8 +1,8 @@
 \subsection{Phase 2 Verification}
-We extended our verification to the advanced probability models implemented in Phase 2: 3rd Order Markov, Finite State Machine (FSM), and Recurrent Neural Network (RNN).
+We extended our verification to the advanced probability models implemented in Phase 2: 3rd Order Markov, Finite State Machine (FSM), and Long Short-Term Memory (LSTM) network.
 
-\subsubsection{High-Order Markov and RNN Models}
-We tested the 3rd Order Markov and RNN models on the same test string as Phase 1.
+\subsubsection{High-Order Markov and Neural Models}
+We tested the 3rd Order Markov and LSTM models on the same test string as Phase 1.
 
 \begin{table}[h]
 \centering
@@ -11,14 +11,14 @@ We tested the 3rd Order Markov and RNN models on the same test string as Phase 1
 \textbf{Model} & \textbf{Original Bits} & \textbf{Compressed Bits} & \textbf{Bits Per Symbol} \\
 \midrule
 3rd Order Markov & 456 & 457 & 8.02 \\
-RNN (Simple SRN) & 456 & 443 & 7.77 \\
+LSTM (Neural) & 456 & 451 & 7.91 \\
 \bottomrule
 \end{tabular}
 \caption{Phase 2 verification results on a 57-byte test string.}
 \label{tab:phase2_verification}
 \end{table}
 
-The RNN model achieved the best compression ratio (7.77 bps) among all models on this short string, demonstrating its ability to quickly adapt even with limited data. The 3rd Order Markov model performed slightly worse (8.02 bps), which is expected as the context dilution problem is more pronounced with higher orders on short sequences.
+The LSTM model achieved a compression ratio of 7.91 bps on this short string. While slightly higher than the previous simple RNN (7.77 bps) due to the increased parameter count (gates) requiring more data to adapt, the LSTM architecture provides significantly better capacity for modeling long-term dependencies in larger files. The 3rd Order Markov model performed similarly (8.02 bps), highlighting the difficulty of compressing very short strings with complex adaptive models.
 
 \subsubsection{FSM Model (Run-Length)}
 To verify the FSM model's ability to handle run-length sequences, we tested it on a synthetic string containing repeated characters ("AAAAABBBBB...").

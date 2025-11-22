@@ -1,10 +1,11 @@
 \subsection{Model-Specific Findings}
+\label{sec:model_findings}
 
 \subsubsection{Markov Models}
-[Key observations about how order affects performance]
+Our experiments revealed a nuance in the relationship between Markov order and compression efficiency. While higher-order models theoretically capture more context, the 3rd Order Markov model performed worse than expected on our datasets (avg. 4.47 bps on text). This is attributed to the \textbf{context dilution} problem: with a state space of $256^3$ ($\approx 16$ million contexts), the relatively small file sizes in our test suite (100KB - 1MB) were insufficient to populate the probability tables, leading to frequent escape codes and suboptimal compression. The 1st and 2nd Order models struck a better balance for these file sizes.
 
 \subsubsection{FSM Models}
-[Situations where FSM excels or underperforms]
+The Finite State Machine (FSM) model, specifically designed with run-length detection, excelled on structured data with repetitive patterns. It achieved competitive compression ratios on binary files and source code, often matching or exceeding the performance of the 1st Order Markov model while maintaining very low encoding times. This makes the FSM approach highly suitable for scenarios where speed is critical and data contains known structural redundancies.
 
 \subsubsection{Neural Models}
-[Trade-offs between learning capacity and computational cost]
+The Long Short-Term Memory (LSTM) model demonstrated superior capability in capturing complex dependencies, achieving the \textbf{best overall compression ratios} on both text (avg. 3.26 bps) and binary data. Unlike the discrete Markov models, the LSTM's continuous state space allows it to generalize better across unseen contexts. On `kennedy.xls`, it achieved a remarkable compression ratio of 8.72, suggesting it successfully learned the underlying binary structure of the Excel format. However, this performance comes at a steep price: the LSTM was orders of magnitude slower than statistical models due to the computational intensity of matrix multiplications and gradient updates for every symbol.

@@ -11,11 +11,23 @@ function run_experiments()
     
     % Setup
     data_dir = 'data';
-    files = dir(fullfile(data_dir, '*.*'));
-    files = files(~[files.isdir]); % Filter out directories
+    % Get files from root data dir (if any) and canterbury subdir
+    files = dir(fullfile(data_dir, '*'));
+    files = files(~[files.isdir]); 
+    files = files(~startsWith({files.name}, '.')); % Exclude hidden files
+    
+    canterbury_dir = fullfile(data_dir, 'canterbury');
+    if isfolder(canterbury_dir)
+        c_files = dir(fullfile(canterbury_dir, '*'));
+        c_files = c_files(~[c_files.isdir]);
+        c_files = c_files(~startsWith({c_files.name}, '.'));
+        for k = 1:length(c_files)
+            c_files(k).folder = canterbury_dir;
+        end
+        files = [files; c_files];
+    end
     
     % Define Models
-    % We use function handles or factory logic
     models = {
         'Markov-1', @(sz) model_markov_1(sz);
         'Markov-2', @(sz) model_markov_2(sz);
@@ -25,17 +37,27 @@ function run_experiments()
     };
     
     % Initialize Results Storage
-    results = struct('File', {}, 'Model', {}, 'OrigSize', {}, 'CompSize', {}, ...
-                     'Ratio', {}, 'BPS', {}, 'EncTime', {}, 'DecTime', {});
+    results_file = 'results.mat';
+    if isfile(results_file)
+        fprintf('Loading existing results from %s...\n', results_file);
+        load(results_file, 'results');
+    else
+        results = struct('File', {}, 'Model', {}, 'OrigSize', {}, 'CompSize', {}, ...
+                         'Ratio', {}, 'BPS', {}, 'EncTime', {}, 'DecTime', {});
+    end
     
     alphabet_size = 256;
     
     for f = 1:length(files)
         filename = files(f).name;
-        filepath = fullfile(data_dir, filename);
+        filepath = fullfile(files(f).folder, filename);
         
         % Read File
         fid = fopen(filepath, 'r');
+        if fid == -1
+            fprintf('Could not open file: %s\n', filepath);
+            continue;
+        end
         raw_data = fread(fid, inf, 'uint8=>double')'; % Read as double row vector
         raw_data = raw_data + 1; % Convert 0-255 to 1-256 for MATLAB indexing
         fclose(fid);
@@ -47,16 +69,16 @@ function run_experiments()
         
         fprintf('Processing %s (%d bytes)...\n', filename, orig_size);
         
-        % Limit size for slow models (RNN) if file is too large
-        % For this demo, we might want to truncate very large files for speed
-        % but for the project we should try to run full or at least reasonable chunks.
-        % Let's cap at 10KB for RNN to keep it responsive during dev, 
-        % but maybe 50KB for others.
-        % Actually, let's just run it. The user can stop if it's too slow.
-        
         for m = 1:size(models, 1)
             model_name = models{m, 1};
             model_factory = models{m, 2};
+            
+            % Check if result already exists
+            existing_idx = find(strcmp({results.File}, filename) & strcmp({results.Model}, model_name));
+            if ~isempty(existing_idx)
+                fprintf('  Skipping %s (already exists)\n', model_name);
+                continue;
+            end
             
             fprintf('  Running %s... ', model_name);
             
@@ -66,8 +88,6 @@ function run_experiments()
             % Measure Encoding
             try
                 tic;
-                % Profile memory if possible, but difficult in script. 
-                % We focus on time/ratio.
                 encoded_seq = arithmetic_encode(raw_data, model_enc);
                 enc_time = toc;
                 
@@ -78,11 +98,7 @@ function run_experiments()
                 
                 fprintf('Ratio: %.2f, BPS: %.2f, Time: %.2fs\n', ratio, bps, enc_time);
                 
-                % Measure Decoding (Optional for speed, but good for verification)
-                % We'll skip full decoding measurement for now to save time, 
-                % unless requested. The prompt asked for "Encoding/Decoding Time".
-                % So we should do it.
-                
+                % Measure Decoding
                 model_dec = model_factory(alphabet_size);
                 tic;
                 decoded_seq = arithmetic_decode(encoded_seq, orig_size, model_dec);
@@ -91,11 +107,6 @@ function run_experiments()
                 % Verify
                 if ~isequal(raw_data, decoded_seq)
                     fprintf('    [FAIL] Decoding mismatch!\n');
-                    diff_idx = find(raw_data ~= decoded_seq, 1);
-                    % if ~isempty(diff_idx)
-                    %     fprintf('      Index: %d, Expected: %d, Got: %d\n', ...
-                    %         diff_idx, raw_data(diff_idx), decoded_seq(diff_idx));
-                    % end
                 end
                 
                 % Store Results
@@ -110,6 +121,9 @@ function run_experiments()
                     'DecTime', dec_time ...
                 );
                 results(end+1) = res_entry;
+                
+                % Save incrementally
+                save('results.mat', 'results');
                 
             catch ME
                 fprintf('[ERROR] %s\n', ME.message);

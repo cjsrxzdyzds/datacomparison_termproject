@@ -76,4 +76,42 @@ function plot_results()
     end
     saveas(gcf, 'images/tradeoff.png');
     fprintf('Saved images/tradeoff.png\n');
+    
+    % Plot 4: File Size vs Compression Ratio
+    figure('Visible', 'off');
+    hold on;
+    file_sizes = [results.OrigSize];
+    ratios = [results.Ratio];
+    model_names = {results.Model};
+    
+    colors = lines(length(models));
+    for m = 1:length(models)
+        idx = strcmp(model_names, models{m});
+        scatter(file_sizes(idx), ratios(idx), 50, colors(m,:), 'filled', 'DisplayName', models{m});
+    end
+    set(gca, 'XScale', 'log');
+    title('File Size vs. Compression Ratio');
+    xlabel('File Size (Bytes) [Log Scale]');
+    ylabel('Compression Ratio');
+    legend('Location', 'bestoutside');
+    grid on;
+    saveas(gcf, 'images/size_vs_ratio.png');
+    fprintf('Saved images/size_vs_ratio.png\n');
+
+    % Plot 5: File Size vs Encoding Time
+    figure('Visible', 'off');
+    hold on;
+    times = [results.EncTime];
+    for m = 1:length(models)
+        idx = strcmp(model_names, models{m});
+        scatter(file_sizes(idx), times(idx), 50, colors(m,:), 'filled', 'DisplayName', models{m});
+    end
+    set(gca, 'XScale', 'log', 'YScale', 'log');
+    title('File Size vs. Encoding Time');
+    xlabel('File Size (Bytes) [Log Scale]');
+    ylabel('Encoding Time (s) [Log Scale]');
+    legend('Location', 'bestoutside');
+    grid on;
+    saveas(gcf, 'images/size_vs_time.png');
+    fprintf('Saved images/size_vs_time.png\n');
 end

@@ -51,9 +51,15 @@ This allows the model to maintain separate probability distributions for "normal
 
 \subsubsection{Neural Network Models}
 % Describe RNN/LSTM architecture
-We implement a custom \textbf{Simple Recurrent Neural Network (RNN)} from scratch in MATLAB to avoid the overhead of the Deep Learning Toolbox for symbol-by-symbol updates.
+We implement a custom \textbf{Long Short-Term Memory (LSTM)} network from scratch in MATLAB to avoid the overhead of the Deep Learning Toolbox for symbol-by-symbol updates. The LSTM architecture is chosen to better capture long-range dependencies compared to simple RNNs.
 \begin{itemize}
-    \item \textbf{Architecture}: Input layer (one-hot), Hidden layer (tanh activation), Output layer (Softmax).
+    \item \textbf{Architecture}: Standard LSTM cell with Input, Forget, and Output gates, plus a Cell state.
+    \begin{itemize}
+        \item \textbf{Forget Gate ($f_t$)}: Controls what information is discarded from the cell state.
+        \item \textbf{Input Gate ($i_t$)}: Controls what new information is stored in the cell state.
+        \item \textbf{Output Gate ($o_t$)}: Controls what parts of the cell state are output to the hidden state.
+    \end{itemize}
+    \item \textbf{Output Layer}: A Softmax layer converts the hidden state into a probability distribution over the 256 possible symbols.
     \item \textbf{Training}: Online Stochastic Gradient Descent (SGD) with Backpropagation Through Time (BPTT) truncated to 1 step.
     \item \textbf{Initialization}: Deterministic weight initialization using sinusoidal functions to ensure identical states for encoder and decoder.
 \end{itemize}

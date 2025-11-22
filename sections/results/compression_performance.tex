@@ -12,8 +12,9 @@
 % Analysis of text results
 % Analysis of text results
 Figure~\ref{fig:compression_performance} compares the compression efficiency (bits per symbol) across different models.
-The 3rd Order Markov model achieved the best compression on text data, but at the cost of significantly higher computational complexity.
-The RNN model showed competitive performance, outperforming the 1st Order Markov model and FSM on text data.
+The \textbf{LSTM model} achieved the best compression on text data, demonstrating the effectiveness of neural context modeling.
+The 3rd Order Markov model struggled with data sparsity, performing worse than the LSTM and FSM on average.
+The FSM model showed robust performance across all data types, particularly for its low complexity.
 
 \begin{figure}[h]
 \centering
