@@ -10,6 +10,22 @@ This section presents our experimental findings across different probability mod
 \input{sections/results/baseline_comparison}
 \input{sections/results/model_findings}
 
+\subsection{Model Correlation Analysis}
+To understand the relationship between different probability models, we analyzed the correlation of their probability predictions on a test sequence.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.8\textwidth]{images/model_correlation.png}
+\caption{Pearson correlation matrix of model probability predictions.}
+\label{fig:correlation}
+\end{figure}
+
+Figure~\ref{fig:correlation} illustrates the correlation matrix. Key observations include:
+\begin{itemize}
+    \item \textbf{High Correlation}: The 1st Order Markov model and FSM model show extremely high correlation ($>0.98$) on random/unstructured data, suggesting they capture very similar statistical properties in the absence of distinct patterns.
+    \item \textbf{Orthogonality}: The RNN model shows low correlation with statistical models, indicating it captures fundamentally different information. This suggests that mixing an RNN with a Markov model would likely yield better compression than mixing two Markov models.
+\end{itemize}
+
 \subsection{Scaling Analysis}
 To better understand how our models perform as data size increases, we analyzed the relationship between file size and both compression ratio and encoding time.
 

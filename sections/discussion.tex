@@ -21,8 +21,10 @@ For applications with:
 \subsubsection{Text vs. Binary Data}
 Text data shows strong local correlations that are well-captured by Markov models, as evidenced by the superior performance of the 3rd Order model on the Canterbury Corpus text files. Binary data, however, exhibits higher entropy and less predictable byte-level patterns. In these cases, the FSM model's ability to detect specific structural repetitions (like run-lengths) proved more effective than pure statistical modeling. This suggests that domain-specific knowledge (e.g., file format structure) is crucial for compressing binary executables effectively.
 
-\subsubsection{Structured Sequences}
 DNA and protein sequences benefit significantly from higher-order Markov models due to the biological constraints that govern sequence formation (e.g., codon triplets). Our experiments showed that the 3rd Order Markov model outperformed others on the `sum` and `ptt5` datasets, likely capturing these inherent structural dependencies.
+
+\subsubsection{Implications of Model Correlation}
+The correlation analysis (Figure~\ref{fig:correlation}) provides a theoretical basis for our Context Mixing results. Since the RNN and Markov models are relatively uncorrelated, they are ideal candidates for mixing; their combined prediction tends to be more robust than either alone. Conversely, mixing highly correlated models (like Markov 1 and FSM on random data) offers diminishing returns, as they tend to make the same errors.
 
 \subsection{Model Selection Guidelines}
 Based on our experiments, we recommend:

@@ -146,3 +146,30 @@ end
 
 fprintf('\nUnit tests complete.\n');
 fprintf('Note: Full encode/decode tests require probability model implementation.\n');
+
+%% Test 6: Context Mixing Model
+fprintf('\n--- Test 6: Context Mixing Model (Markov 1 + Markov 2) ---\n');
+
+% Encode
+% Mix Markov 1 and Markov 2
+models_enc = {model_markov_1(alphabet_size), model_markov_2(alphabet_size)};
+model_enc = model_mixing(models_enc, alphabet_size);
+code = arithmetic_encode(seq, model_enc);
+
+fprintf('Encoded Length: %d bits\n', length(code));
+fprintf('Compression Ratio: %.2f bits/symbol\n', length(code)/length(seq));
+
+% Decode
+models_dec = {model_markov_1(alphabet_size), model_markov_2(alphabet_size)};
+model_dec = model_mixing(models_dec, alphabet_size); % Fresh model for decoding
+decoded_seq = arithmetic_decode(code, length(seq), model_dec);
+
+% Verify
+if isequal(seq, decoded_seq)
+    fprintf('Result: PASS (Decoded sequence matches original)\n');
+else
+    fprintf('Result: FAIL (Mismatch)\n');
+    mismatch_idx = find(seq ~= decoded_seq, 1);
+    fprintf('First mismatch at index %d: Expected %d, Got %d\n', ...
+        mismatch_idx, seq(mismatch_idx), decoded_seq(mismatch_idx));
+end

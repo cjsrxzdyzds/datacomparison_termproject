@@ -65,6 +65,13 @@ We implement a custom \textbf{Long Short-Term Memory (LSTM)} network from scratc
 \end{itemize}
 The model updates its weights after every symbol, allowing it to adapt to the data stream in real-time.
 
+\subsubsection{Context Mixing Models}
+To leverage the complementary strengths of different models, we implemented a \textbf{Context Mixing} strategy. This meta-model combines the probability estimates of multiple sub-models (e.g., Markov and FSM) to produce a final prediction.
+\begin{itemize}
+    \item \textbf{Weighted Averaging}: The probability of a symbol $s$ is calculated as $P(s) = \sum_{i} w_i P_i(s)$, where $w_i$ is the weight of model $i$.
+    \item \textbf{Adaptive Weights}: Weights are dynamically updated based on prediction accuracy. Models that assign higher probability to the actual observed symbol have their weights increased, allowing the system to shift focus to the most effective model for the current local context.
+\end{itemize}
+
 \subsection{Implementation Details}
 % MATLAB implementation specifics
 All models are implemented in MATLAB using object-oriented programming (handle classes) to maintain state across symbol processing. Key implementation features include:

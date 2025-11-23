@@ -29,6 +29,30 @@ Understanding the trade-offs between probability models for arithmetic coding ha
     \item Advancing neural compression techniques by identifying their strengths and limitations
 \end{itemize}
 
+\subsection{Project Execution Roadmap}
+The development of this project followed a structured four-phase roadmap, ensuring a systematic exploration of probability models:
+
+\subsubsection{Phase 1: Foundation (Week 1)}
+We established the core arithmetic coding engine and implemented baseline Markov models (1st and 2nd Order). Verification focused on correctness using small test strings and unit tests.
+
+\subsubsection{Phase 2: Advanced Models (Week 2)}
+We expanded the model suite to include:
+\begin{itemize}
+    \item \textbf{3rd Order Markov}: Implemented with sparse hashmaps to handle the $256^3$ state space.
+    \item \textbf{FSM}: Designed for run-length encoding to handle binary data.
+    \item \textbf{LSTM}: A custom neural network implementation for sequence prediction.
+\end{itemize}
+
+\subsubsection{Phase 3: Experiments \& Analysis (Week 3)}
+We conducted extensive benchmarking on the Canterbury Corpus, measuring compression ratios and execution time. New analytical tools were developed, including:
+\begin{itemize}
+    \item \textbf{Context Mixing}: A meta-model to combine predictions.
+    \item \textbf{Correlation Analysis}: A study of model orthogonality.
+\end{itemize}
+
+\subsubsection{Phase 4: Finalization (Week 4)}
+The final phase focused on synthesizing results into this report, generating comparative visualizations, and documenting the trade-offs between model complexity and performance.
+
 \subsection{Final Remarks}
 While arithmetic coding with sophisticated probability models can approach theoretical entropy limits, practical considerations of speed and memory often favor simpler models. The optimal choice depends on the specific application context, and our comparative analysis provides the empirical foundation for making informed decisions.
 
