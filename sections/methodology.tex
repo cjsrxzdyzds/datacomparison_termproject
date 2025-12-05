@@ -7,6 +7,7 @@ This section describes our implementation of arithmetic coding and the probabili
 
 \subsubsection{Encoder}
 % Describe encoding algorithm
+\subsubsection{Encoder Mechanics and State Management}
 Our arithmetic encoder maintains an interval $[L, H)$ initialized to $[0, 1)$. For each symbol $s$ with cumulative probability range $[P_{\text{low}}(s), P_{\text{high}}(s))$, the interval is updated as:
 \begin{align}
     \text{range} &= H - L \\
@@ -14,13 +15,34 @@ Our arithmetic encoder maintains an interval $[L, H)$ initialized to $[0, 1)$. F
     L' &= L + \text{range} \times P_{\text{low}}(s)
 \end{align}
 
-% Scaling operations
-To prevent underflow, we implement E1, E2, and E3 scaling:
+\paragraph{Precision Management via Renormalization}
+As the interval narrows, it eventually requires more precision than standard floating-point types provide. To maintain numerical stability, we implement a renormalization process that outputs bits incrementally. This is governed by three scaling conditions (E1, E2, E3), formalized as follows:
+
 \begin{itemize}
-    \item \textbf{E1 scaling}: When $H < 0.5$, output 0 and rescale
-    \item \textbf{E2 scaling}: When $L \geq 0.5$, output 1 and rescale
-    \item \textbf{E3 scaling}: When $L \geq 0.25$ and $H < 0.75$, track convergence
+    \item \textbf{E1 Condition (High-Bit Converged to 0)}: If $H < 0.5$, the entire interval lies in the lower half. We output a \texttt{0}, usually followed by any pending E3 bits as \texttt{1}s. The interval is rescaled: $L \leftarrow 2L, H \leftarrow 2H$.
+    
+    \item \textbf{E2 Condition (High-Bit Converged to 1)}: If $L \geq 0.5$, the interval lies in the upper half. We output a \texttt{1}, followed by pending E3 bits as \texttt{0}s. Rescale: $L \leftarrow 2(L - 0.5), H \leftarrow 2(H - 0.5)$.
+    
+    \item \textbf{E3 Condition (Straddle Case caused by Underflow risk)}: If $L \geq 0.25$ and $H < 0.75$, the interval is "stuck" around the midpoint. We cannot commit a bit yet, so we increment a \texttt{pending\_bits} counter and zoom in on the middle: $L \leftarrow 2(L - 0.25), H \leftarrow 2(H - 0.25)$.
 \end{itemize}
+
+\paragraph{Encoding Trace Example}
+To illustrate this, Table~\ref{tab:trace} shows the state progression for encoding the sequence "BAB" with a static model $P(A)=0.6, P(B)=0.2, P(EOF)=0.2$.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|l|l|l|l|l|}
+\hline
+\textbf{Step} & \textbf{Symbol} & \textbf{Interval $[L, H)$} & \textbf{Action} & \textbf{Output} \\ \hline
+Init & - & $[0.0, 1.0)$ & - & - \\ \hline
+1 & B & $[0.6, 0.8)$ & - & - \\ \hline
+1a & - & $[0.2, 0.6)$ & E2 Scaling & 1 \\ \hline
+1b & - & $[0.4, 1.2)$ & E3 Scaling & (pending++) \\ \hline
+2 & A & $[0.4, 0.88)$ & - & - \\ \hline
+\end{tabular}
+\caption{Trace of interval updates and scaling operations.}
+\label{tab:trace}
+\end{table}
 
 \subsubsection{Decoder}
 % Describe decoding algorithm

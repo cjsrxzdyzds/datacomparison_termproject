@@ -54,7 +54,7 @@ Our MATLAB implementation may not reflect optimized C/C++ performance. [Discuss 
 While we tested diverse data types, [limitations in scope].
 
 \subsubsection{Neural Model Training}
-Online training of neural models during compression presents challenges: [discuss challenges and how they were addressed].
+Online training of neural models during compression requires updating weights after every symbol, which is computationally expensive. To make this feasible in MATLAB without hardware acceleration, we truncated Backpropagation Through Time (BPTT) to a single step. While this limits the model's ability to learn long-term dependencies via the gradient signal, the LSTM's cell state still carries historical information forward. This design choice strikes a balance between execution speed and the ability to capture local statistical patterns, though a full BPTT implementation would likely yield higher compression ratios at the cost of significantly increased encoding time.
 
 \subsection{Future Work}
 Promising directions for future research include:

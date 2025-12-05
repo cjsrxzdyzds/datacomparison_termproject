@@ -1,0 +1,23 @@
+\subsection{Qualitative Analysis}
+\label{sec:qualitative_analysis}
+
+Beyond aggregate metrics, it is instructive to examine \textit{why} and \textit{where} models succeed or fail.
+
+\subsubsection{Learning Dynamics and Warm-up}
+All adaptive models start with a uniform probability distribution. As they process the stream, they "learn" the source statistics. This creates a characteristic learning curve:
+\begin{enumerate}
+    \item \textbf{Initialization Phase (0-500 bytes)}: Compression is negative (expansion) as the model encounters new symbols with low probability estimates ($P \approx 1/256$, costing 8 bits).
+    \item \textbf{Rapid Adaptation (500-5KB)}: The model quickly captures frequent 1-grams (e.g., 'e', ' ', 'a' in English). Bit rates drop precipitously.
+    \item \textbf{Steady State (>5KB)}: The compression ratio stabilizes.
+\end{enumerate}
+For LSTMs, this warm-up is slower because gradient updates are small ($\eta=0.05$). While Markov models can jump to high probability estimates after a single sighting (due to Laplace smoothing with small denominators), LSTMs require multiple consistent observations to adjust weights significantly.
+
+\subsubsection{Failure Mode: The High-Entropy Paradox}
+When compressing already compressed data (e.g., `sum` executable or `kennedy.xls` compressed diagrams), our models occasionally produced files \textit{larger} than the original.
+\begin{itemize}
+    \item \textbf{Cause}: In high-entropy streams, symbol occurrence is nearly uniform. An adaptive model, hunting for patterns, may temporarily overfit to a spurious sequence (e.g., "AF AF AF"). When the pattern breaks ("AF AF B2"), the model assigns a very low probability to the deviation, incurring a high bit cost ($-\log_2 \epsilon$).
+    \item \textbf{Result}: The "penalty" for incorrect prediction outweighs the minor gains from correct predictions, resulting in net expansion.
+\end{itemize}
+
+\subsubsection{Context Dilution in sparse tables}
+The 3rd Order Markov model frequently suffered from context dilution. In `grammar.lsp`, we observed cases where the unique context "defun " (3rd order 'u', 'n', ' ') appeared only once. The model created a new context entry. However, since the file was short (3KB), this context was never re-used effectively. Memory was consumed storing determining contexts that provided no predictive value for future symbols, essentially acting as a "look-up table" for history rather than a generalizing model.

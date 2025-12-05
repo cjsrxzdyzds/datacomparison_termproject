@@ -1,44 +1,69 @@
 \section{Background and Related Work}
 \label{sec:background}
 
-\subsection{Arithmetic Coding}
-% Brief overview of arithmetic coding principles
-Arithmetic coding \cite{rissanen1979arithmetic, witten1987arithmetic} represents a sequence of symbols as a single floating-point number in the interval $[0, 1)$. The key advantages include:
-\begin{itemize}
-    \item Near-optimal compression (approaches entropy limit)
-    \item Seamless integration with adaptive probability models
-    \item No requirement for integral bit assignments
-\end{itemize}
+This section establishes the theoretical foundations of data compression, focusing on information theory, the mathematical mechanics of arithmetic coding, and the dynamics of recurrent neural networks.
 
-% Technical details
-The encoding process maintains an interval $[L, H)$ that narrows as each symbol is processed. To avoid numerical underflow, practical implementations use techniques such as E1, E2, and E3 scaling operations.
+\subsection{Information Theoretic Foundations}
+
+\subsubsection{Entropy and Information Content}
+At the core of lossless compression is the concept of \textit{Shannon Entropy}, which quantifies the expected amount of information conveyed by an event. For a discrete random variable $X$ with possible outcomes $x_1, ..., x_n$ occurring with probabilities $P(x_1), ..., P(x_n)$, the entropy $H(X)$ is defined as:
+\begin{equation}
+    H(X) = - \sum_{i=1}^{n} P(x_i) \log_2 P(x_i)
+\end{equation}
+This value represents the theoretical lower bound on the average number of bits needed to encode a symbol from the distribution $P$. No lossless compression algorithm can achieve an average code length significantly lower than $H(X)$.
+
+\subsubsection{Model Accuracy and KL-Divergence}
+The efficiency of an arithmetic coder depends directly on how significantly the estimated probability distribution $Q$ deviates from the true underlying distribution $P$ of the data source. The cost of this mismatch is quantified by the Kullback-Leibler (KL) divergence:
+\begin{equation}
+    D_{KL}(P || Q) = \sum_{x \in \mathcal{X}} P(x) \log \left( \frac{P(x)}{Q(x)} \right)
+\end{equation}
+In practical terms, if we encode a source $P$ using a model $Q$, the average number of bits used per symbol will be $H(P) + D_{KL}(P || Q)$. Thus, the goal of our probability modeling phase (Markov, FSM, LSTM) is essentially to minimize this divergence.
+
+\subsection{Mathematical Mechanics of Arithmetic Coding}
+
+\subsubsection{Interval Subdivision}
+Arithmetic coding maps a string of symbols to a sub-interval of $[0, 1)$. Unlike Huffman coding, which is optimal only when symbol probabilities are powers of $1/2$, arithmetic coding is optimal for any probability distribution.
+Formally, we begin with the current interval $[L_0, H_0) = [0, 1)$. For the $i$-th symbol $s_i$ in a sequence, with estimated probability $p(s_i)$ and cumulative probability $C(s_i) = \sum_{j < s_i} p(j)$, the interval is updated recursively:
+\begin{align}
+    \text{Range}_i &= H_{i-1} - L_{i-1} \\
+    L_i &= L_{i-1} + \text{Range}_i \times C(s_i) \\
+    H_i &= L_{i-1} + \text{Range}_i \times (C(s_i) + p(s_i))
+\end{align}
+As the sequence grows, the interval width $\text{Range}_i$ shrinks equal to the product of the probabilities of the symbols encountered: $\text{Range}_n = \prod_{k=1}^n p(s_k)$. The number of bits required to distinguish this interval is approximately $-\log_2(\text{Range}_n)$, which sums to the total self-information of the sequence.
+
+\subsubsection{Ambiguity Resolution and Decoding}
+Unique decodability is guaranteed because the intervals for distinct messages are disjoint. The decoder, knowing the final value $v$ within the final interval, can reverse the process. At step $i$, it finds the unique symbol $s$ such that:
+\begin{equation}
+    C(s) \leq \frac{v - L_{i-1}}{H_{i-1} - L_{i-1}} < C(s) + p(s)
+\end{equation}
+This inequality identifies the only possible symbol that could have reduced the interval to contain $v$, ensuring lossless recovery.
 
 \subsection{Probability Models}
 
-\subsubsection{Markov Models}
-% Discuss order-k Markov models
-Order-$k$ Markov models predict the next symbol based on the previous $k$ symbols (context). While higher-order models can capture longer dependencies, they suffer from:
+\subsubsection{Markov Models and Context Limitations}
+Order-$k$ Markov models approximate the conditional probability $P(x_t | x_{t-1}, ..., x_{t-k})$. While effective, they suffer from the curse of dimensionality. The state space size $|\Sigma|^{k}$ grows exponentially. For an alphabet $|\Sigma|=256$, a 3rd-order model has over 16 million states. This leads to:
 \begin{itemize}
-    \item Exponential growth in memory requirements: $O(|\Sigma|^{k+1})$ where $|\Sigma|$ is alphabet size
-    \item Context dilution problem: many contexts appear infrequently in training data
+    \item \textbf{Data Sparsity}: Most contexts are never observed, making probability estimation unreliable (high variance).
+    \item \textbf{Context Dilution}: The model splits the evidence across too many buckets, failing to generalize.
 \end{itemize}
 
 \subsubsection{Finite State Machine Models}
-% Discuss FSM-based approaches
-FSM models maintain internal states that evolve based on input symbols. They can efficiently capture patterns like runs of repeated symbols or alternating sequences without requiring large context tables.
+FSM models offer a more compact representation by merging equivalent histories into states. Our implementation focuses specifically on \textit{Run-Length Estimation}, essentially defining a 2-state Hidden Markov Model (HMM) where the hidden states correspond to a "Random" mode and a "Run" mode.
 
-\subsubsection{Neural Network Models}
-% Recent work on neural compression
-Recent advances in neural compression \cite{hochreiter1997long} use recurrent neural networks (RNNs) and Long Short-Term Memory (LSTM) networks to learn complex probability distributions. These models can potentially capture long-range dependencies but require significant computational resources.
+\subsubsection{Neural Network Models and Gradient Dynamics}
+\label{sec:nn_theory}
+Recurrent Neural Networks (RNNs) theoretically encompass Markov models of infinite order. However, training them via Backpropagation Through Time (BPTT) introduces the \textit{Vanishing Gradient Problem}.
+The error gradient $\delta$ propagates back through time layers. If the spectral radius of the recurrent weight matrix is less than 1, the gradients decay exponentially:
+\begin{equation}
+    \left\| \frac{\partial \mathcal{L}}{\partial h_0} \right\| \le \left\| \frac{\partial \mathcal{L}}{\partial h_t} \right\| \prod_{k=0}^{t-1} \| \mathbf{W}_{rec} \| \| \sigma'(z_k) \|
+\end{equation}
+This prevents standard RNNs from learning dependencies longer than ~10 time steps.
+
+\textbf{Long Short-Term Memory (LSTM)} networks solve this by introducing the Constant Error Carousel (CEC). The cell state update equation is additive rather than multiplicative:
+\begin{equation}
+    c_t = f_t \odot c_{t-1} + i_t \odot \tilde{c}_t
+\end{equation}
+If the forget gate $f_t \approx 1$, the gradient can flow backwards through $c_t$ without decay, allowing the model to capture dependencies over thousands of symbols. This capability is critical for compressing data with long-range structures, such as XML files or executable headers.
 
 \subsection{Related Work}
-% Survey of existing comparative studies
-Previous comparative studies have examined:
-\begin{itemize}
-    \item PPM (Prediction by Partial Matching) variants \cite{cleary1984data}
-    \item Context mixing approaches \cite{mahoney2005adaptive}
-    \item Neural compression techniques \cite{schrittwieser2023online}
-\end{itemize}
-
-% Gap that this work addresses
-However, few studies provide a unified comparison across traditional statistical models and modern neural approaches within the same arithmetic coding framework. This work fills that gap by implementing diverse models in a common testbed and evaluating them on consistent benchmarks.
+Existing literature often separates statistical and neural compression. PPM (Prediction by Partial Matching) \cite{cleary1984data} remains the gold standard for statistical modeling, using adaptive context orders. Neural approaches like DeepZip \cite{goyal2019deepzip} have shown that RNNs can compete with PPM, but often require hardware acceleration. Our work bridges this gap by evaluating these distinct paradigms within a single, controlled arithmetic coding environment.

@@ -13,6 +13,7 @@ BIBTEX = bibtex
 
 # LaTeX flags
 LATEX_FLAGS = -output-directory=$(BUILD_DIR) -interaction=nonstopmode -halt-on-error
+export TEXINPUTS=.:./acmart-primary//:
 
 # Source files
 TEX_SOURCES = $(MAIN).tex \

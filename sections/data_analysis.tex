@@ -1,0 +1,57 @@
+\section{Dataset Characterization}
+\label{sec:data_analysis}
+
+To understand the performance differences between our models, we first analyze the statistical properties of our test datasets. We focus on two representative files: \texttt{alice29.txt} (Natural Language) and \texttt{kennedy.xls} (Binary Structured Data).
+
+\subsection{Entropy Analysis}
+
+\subsubsection{Global Byte Distribution}
+Figure~\ref{fig:byte_dist} compares the global byte frequency distributions.
+\begin{figure}[h]
+    \centering
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{images/hist_alice29.png}
+        \caption{Byte frequency for Alice Text.}
+    \end{minipage}
+    \hfill
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{images/hist_kennedy.png}
+        \caption{Byte frequency for Kennedy Excel.}
+    \end{minipage}
+    \caption{Global 1-gram statistics.}
+    \label{fig:byte_dist}
+\end{figure}
+
+The text file exhibits a classic distribution focused on the ASCII range (32-126), with distinct peaks for common letters ('e', 't', 'a') and the space character. The Excel file, in contrast, shows a sparse but high-variance distribution with significant occurrences of null bytes (0x00) and specific control structures typical of the OLE2 binary format.
+
+\subsubsection{Local Entropy Dynamics}
+Global statistics often mask local redundancies. We computed the \textit{Rolling Entropy} over a 1KB sliding window to visualize how information density changes throughout the file.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.9\textwidth]{images/entropy_alice29.png}
+    \caption{Rolling entropy of \texttt{alice29.txt}. Note the consistent entropy level around 4-5 bits/symbol.}
+    \label{fig:ent_alice}
+\end{figure}
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.9\textwidth]{images/entropy_kennedy.png}
+    \caption{Rolling entropy of \texttt{kennedy.xls}. Note the regions of near-zero entropy (padding) versus high-entropy compressed data.}
+    \label{fig:ent_kennedy}
+\end{figure}
+
+As seen in Figure~\ref{fig:ent_kennedy}, the Excel file contains vast regions of low entropy (likely zero-padding) intermixed with high-entropy blocks. 
+\subsection{Visual Entropy Analysis}
+To further illustrate the concept of entropy, we analyzed two standard test images: \texttt{Desert.gif} and \texttt{Sky and birds.gif}. Figure~\ref{fig:img_comparison} presents the images alongside their pixel intensity histograms.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=\textwidth]{images/image_comparison.png}
+    \caption{Visual and statistical comparison of Desert vs. Sky images.}
+    \label{fig:img_comparison}
+\end{figure}
+
+The \textbf{Desert} image exhibits a lower entropy (concentrated histogram), reflecting its large uniform regions of sand and sky. In contrast, the \textbf{Sky and birds} image has a higher complexity due to the detailed texture of the birds against the clouds, resulting in a flatter histogram and higher bit-per-pixel requirement for lossless compression. This comparison visually validates why certain files are more "compressible" than others based purely on their statistical distribution.

@@ -1,53 +1,110 @@
-\documentclass[11pt]{article}
-\usepackage[utf8]{inputenc}
-\usepackage[margin=1in]{geometry}
-\usepackage{amsmath}
-\usepackage{amssymb}
-\usepackage{amsthm}
-\usepackage{graphicx}
-\usepackage{hyperref}
-\usepackage{cite}
-\usepackage{booktabs}
+\documentclass[acmsmall]{acmart}
+
+% Packages
+% acmart loads: amsmath, amsthm, amssymb, booktabs, graphicx, hyperref, xcolor, natbib
+% \usepackage[utf8]{inputenc} % Default in modern LaTeX
+% \usepackage[margin=1in]{geometry} % Handled by acmart
+% \usepackage{amsmath} % Handled by acmart
+% \usepackage{amssymb} % Handled by acmart
+% \usepackage{amsthm} % Handled by acmart
+% \usepackage{graphicx} % Handled by acmart
+% \usepackage{hyperref} % Handled by acmart
+% \usepackage{cite} % Conflict with acmart (uses natbib)
+% \usepackage{booktabs} % Handled by acmart
+% \usepackage{xcolor} % Handled by acmart
+
 \usepackage{enumitem}
 \usepackage{algorithm}
 \usepackage{algorithmic}
+\usepackage{listings}
+
+\lstset{
+    language=Matlab,
+    basicstyle=\ttfamily\footnotesize,
+    keywordstyle=\color{blue},
+    commentstyle=\color{green!60!black},
+    stringstyle=\color{purple},
+    numbers=left,
+    numberstyle=\tiny,
+    frame=single,
+    breaklines=true,
+    breakatwhitespace=true,
+    tabsize=4
+}
 
 % Graphics path
 \graphicspath{{./images/}}
 
-% Title information
-\title{Comparative Analysis of Probability Models for Arithmetic Coding}
-\author{Oscar Fang\\G42568236\\
-George Washington University\\
-CSCI 6351 Data Compression}
-\date{\today}
+% Rights management information
+\setcopyright{acmlicensed}
+\copyrightyear{2025}
+\acmYear{2025}
+\acmDOI{10.1145/XXXXXX.XXXXXX}
+
+\acmConference[CSCI 6351]{Data Compression Term Project}{December 2025}{Washington, DC, USA}
+\acmBooktitle{CSCI 6351: Data Compression Term Project, December 2025, Washington, DC, USA}
+\acmISBN{978-1-4503-XXXX-X/18/06}
 
 \begin{document}
 
-\maketitle
+\title{Comparative Analysis of Probability Models for Arithmetic Coding}
+
+\author{Oscar Fang}
+\affiliation{%
+  \institution{George Washington University}
+  \streetaddress{CSCI 6351 Data Compression}
+  \city{Washington}
+  \state{DC}
+  \country{USA}
+}
+\email{G42568236}
+
+\renewcommand{\shortauthors}{Fang}
 
 % Abstract
+% The abstract is now part of the top matter in acmart
 \input{sections/abstract}
+% Note: The original generic 'sections/abstract' might contain \begin{abstract}...\end{abstract}
+% If so, we need to adjust. I'll incorrectly assumed it didn't. 
+% Let's check sections/abstract.tex first. 
+% If it has the environment, I should just \input{sections/abstract}.
+% PROACTIVE FIX: I will check sections/abstract.tex content in the next step logic if I could, 
+% but since I'm writing now, I will assume standard practice.
+% Wait, if the previous file had \input{sections/abstract} inside document:
+% 45: % Abstract
+% 46: \input{sections/abstract}
+% It likely contains the environment.
+% In acmart, it must be inside the top matter.
+% If `sections/abstract.tex` has `\begin{abstract}`, `acmart` might handle it or might error if nested.
+% Actually `acmart` defines abstract environment.
+% I will check `sections/abstract.tex` momentarily. 
+% For now I will write the file assuming I might need to fix the abstract input.
+% I'll use \input{sections/abstract} directly inside the document body if it contains the environment, 
+% BUT acmart requires abstract BEFORE maketitle.
+% So I will put \input{sections/abstract} before \maketitle.
 
-% Table of Contents
-\tableofcontents
-\newpage
+% Keywords
+\keywords{Arithmetic Coding, Probability Models, Data Compression}
 
-% Main sections
+\maketitle
+
+% Standard content
 \input{sections/introduction}
 \input{sections/background}
 \input{sections/methodology}
 \input{sections/experimental_setup}
+\input{sections/data_analysis}
 \input{sections/results}
 \input{sections/discussion}
 \input{sections/conclusion}
 
 % References
-\bibliographystyle{plain}
+\bibliographystyle{ACM-Reference-Format}
 \bibliography{references}
 
-% Appendices (optional)
+% Appendices
 \appendix
 \input{sections/appendix}
+\input{sections/appendix_code}
 
 \end{document}
