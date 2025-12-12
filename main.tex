@@ -13,7 +13,7 @@
 % \usepackage{booktabs} % Handled by acmart
 % \usepackage{xcolor} % Handled by acmart
 
-\usepackage{enumitem}
+% \usepackage{enumitem} % Conflict with acmart
 \usepackage{algorithm}
 \usepackage{algorithmic}
 \usepackage{listings}
@@ -52,7 +52,6 @@
 \author{Oscar Fang}
 \affiliation{%
   \institution{George Washington University}
-  \streetaddress{CSCI 6351 Data Compression}
   \city{Washington}
   \state{DC}
   \country{USA}
@@ -83,8 +82,35 @@
 % BUT acmart requires abstract BEFORE maketitle.
 % So I will put \input{sections/abstract} before \maketitle.
 
+% CCS Concepts
+\begin{CCSXML}
+<ccs2012>
+   <concept>
+       <concept_id>10002950.10003714.10003716.10011138</concept_id>
+       <concept_desc>Mathematics of computing~Continuous mathematics</concept_desc>
+       <concept_significance>500</concept_significance>
+       </concept>
+   <concept>
+       <concept_id>10010147.10010178</concept_id>
+       <concept_desc>Computing methodologies~Artificial intelligence</concept_desc>
+       <concept_significance>300</concept_significance>
+       </concept>
+ </ccs2012>
+\end{CCSXML}
+
+\ccsdesc[500]{Mathematics of computing~Continuous mathematics}
+\ccsdesc[300]{Computing methodologies~Artificial intelligence}
+
 % Keywords
 \keywords{Arithmetic Coding, Probability Models, Data Compression}
+
+% Teaser Figure
+\begin{teaserfigure}
+  \includegraphics[width=\textwidth]{image_comparison}
+  \caption{Visual comparison between "Desert" (High Entropy) and "Sky and Birds" (Low Entropy). The histograms and entropy plots below each image illustrate the difference in information content, which directly correlates with the compression ratios achieved by our models.}
+  \Description{Side-by-side comparison of two images. Left is Desert.gif with complex textures. Right is Sky and birds.gif with large flat areas. Histograms match this complexity.}
+  \label{fig:teaser}
+\end{teaserfigure}
 
 \maketitle
 

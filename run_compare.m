@@ -24,6 +24,3 @@ try
  disp('Saved');
  catch ME
  disp(ME.message);
- exit(1);
- end
- exit;

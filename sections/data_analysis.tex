@@ -13,12 +13,14 @@ Figure~\ref{fig:byte_dist} compares the global byte frequency distributions.
         \centering
         \includegraphics[width=\linewidth]{images/hist_alice29.png}
         \caption{Byte frequency for Alice Text.}
+        \Description{Histogram showing high frequency for lowercase letters and space character.}
     \end{minipage}
     \hfill
     \begin{minipage}{0.48\textwidth}
         \centering
         \includegraphics[width=\linewidth]{images/hist_kennedy.png}
         \caption{Byte frequency for Kennedy Excel.}
+        \Description{Histogram showing sparse distribution with spikes at 0 and control characters.}
     \end{minipage}
     \caption{Global 1-gram statistics.}
     \label{fig:byte_dist}
@@ -33,6 +35,7 @@ Global statistics often mask local redundancies. We computed the \textit{Rolling
     \centering
     \includegraphics[width=0.9\textwidth]{images/entropy_alice29.png}
     \caption{Rolling entropy of \texttt{alice29.txt}. Note the consistent entropy level around 4-5 bits/symbol.}
+    \Description{Line graph showing entropy fluctuating between 4 and 5 bits per symbol.}
     \label{fig:ent_alice}
 \end{figure}
 
@@ -40,6 +43,7 @@ Global statistics often mask local redundancies. We computed the \textit{Rolling
     \centering
     \includegraphics[width=0.9\textwidth]{images/entropy_kennedy.png}
     \caption{Rolling entropy of \texttt{kennedy.xls}. Note the regions of near-zero entropy (padding) versus high-entropy compressed data.}
+    \Description{Line graph showing entropy dropping to near zero in multiple regions.}
     \label{fig:ent_kennedy}
 \end{figure}
 
@@ -51,6 +55,7 @@ To further illustrate the concept of entropy, we analyzed two standard test imag
     \centering
     \includegraphics[width=\textwidth]{images/image_comparison.png}
     \caption{Visual and statistical comparison of Desert vs. Sky images.}
+    \Description{Comparison plot showing two images and their histograms. Desert histogram is concentrated, Sky histogram is flatter.}
     \label{fig:img_comparison}
 \end{figure}
 

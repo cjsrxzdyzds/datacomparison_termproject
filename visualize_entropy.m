@@ -46,8 +46,8 @@ function visualize_entropy()
         symbol = seq(i);
         
         % Get probability of the symbol
-        [~, L, H] = model.get_symbol(symbol); 
-        % Note: get_symbol returns [symbol_decoded, low, high] or similar depending on impl.
+        % Get probability of the symbol
+
         % Actually, standard interface is [low, high] = get_range(symbol)
         % But we need the probability P = high - low.
         

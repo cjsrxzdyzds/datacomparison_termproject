@@ -37,7 +37,6 @@ Thumbs.db
 *.swp
 *.swo
 *~
-.vscode/
 .idea/
 
 # MATLAB specific
@@ -206,7 +205,6 @@ cython_debug/
 .abstra/
 
 # Visual Studio Code
-# .vscode/
 
 # Ruff stuff:
 .ruff_cache/
