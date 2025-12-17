@@ -6,8 +6,7 @@ This section describes our implementation of arithmetic coding and the probabili
 \subsection{Arithmetic Coding Framework}
 
 \subsubsection{Encoder}
-% Describe encoding algorithm
-\subsubsection{Encoder Mechanics and State Management}
+The encoding process converts a sequence of symbols into a single binary fraction within the unit interval.
 Our arithmetic encoder maintains an interval $[L, H)$ initialized to $[0, 1)$. For each symbol $s$ with cumulative probability range $[P_{\text{low}}(s), P_{\text{high}}(s))$, the interval is updated as:
 \begin{align}
     \text{range} &= H - L \\
@@ -37,8 +36,8 @@ To illustrate this, Table~\ref{tab:trace} shows the state progression for encodi
 Init & - & $[0.0, 1.0)$ & - & - \\ \hline
 1 & B & $[0.6, 0.8)$ & - & - \\ \hline
 1a & - & $[0.2, 0.6)$ & E2 Scaling & 1 \\ \hline
-1b & - & $[0.4, 1.2)$ & E3 Scaling & (pending++) \\ \hline
-2 & A & $[0.4, 0.88)$ & - & - \\ \hline
+2 & A & $[0.2, 0.44)$ & - & - \\ \hline
+2a & - & $[0.4, 0.88)$ & E1 Scaling & 0 \\ \hline
 \end{tabular}
 \caption{Trace of interval updates and scaling operations.}
 \label{tab:trace}
@@ -88,7 +87,7 @@ We implement a custom \textbf{Long Short-Term Memory (LSTM)} network from scratc
 The model updates its weights after every symbol, allowing it to adapt to the data stream in real-time.
 
 \subsubsection{Context Mixing Models}
-To leverage the complementary strengths of different models, we implemented a \textbf{Context Mixing} strategy. This meta-model combines the probability estimates of multiple sub-models (e.g., Markov and FSM) to produce a final prediction.
+To leverage the complementary strengths of different models, we implemented a \textbf{Context Mixing} strategy~\cite{mahoney2005adaptive}. This meta-model combines the probability estimates of multiple sub-models (e.g., Markov and FSM) to produce a final prediction.
 \begin{itemize}
     \item \textbf{Weighted Averaging}: The probability of a symbol $s$ is calculated as $P(s) = \sum_{i} w_i P_i(s)$, where $w_i$ is the weight of model $i$.
     \item \textbf{Adaptive Weights}: Weights are dynamically updated based on prediction accuracy. Models that assign higher probability to the actual observed symbol have their weights increased, allowing the system to shift focus to the most effective model for the current local context.
@@ -98,7 +97,7 @@ To leverage the complementary strengths of different models, we implemented a \t
 % MATLAB implementation specifics
 All models are implemented in MATLAB using object-oriented programming (handle classes) to maintain state across symbol processing. Key implementation features include:
 \begin{itemize}
-    \item \textbf{Arithmetic Coding}: Implemented using double-precision floating-point arithmetic with renormalization (E1, E2, E3 scaling) to maintain numerical stability.
+    \item \textbf{Arithmetic Coding}: Implemented using double-precision floating-point arithmetic with renormalization (E1, E2, E3 scaling) as described by Witten et al.~\cite{witten1987arithmetic} to maintain numerical stability.
     \item \textbf{Data Structures}: Full multi-dimensional arrays are used for context tables in 1st and 2nd order Markov models, as the alphabet size ($|\Sigma|=256$) allows for direct indexing without excessive memory overhead for these orders.
     \item \textbf{Modularity}: The system uses a polymorphic design where the arithmetic coder accepts any model object that implements the required \texttt{get\_range} and \texttt{update} methods.
 \end{itemize}

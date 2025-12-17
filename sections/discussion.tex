@@ -48,10 +48,10 @@ General & Adaptive & LSTM (if resources allow) \\ \hline
 \subsection{Limitations}
 
 \subsubsection{Implementation Constraints}
-Our MATLAB implementation may not reflect optimized C/C++ performance. [Discuss impact]
+Our MATLAB implementation may not reflect optimized C/C++ performance. The overhead of the MATLAB interpreter, particularly for object-oriented handle classes and frequent function calls in the arithmetic coding loop, significantly inflates execution time. Use of the Profiler revealed that dynamic dispatch and memory allocation for temporary arrays were major bottlenecks. While valid for algorithmic comparison, absolute timing results should not be directly compared against production-grade compressors like \texttt{gzip}, which benefit from low-level compiler optimizations and pointer arithmetic.
 
 \subsubsection{Dataset Coverage}
-While we tested diverse data types, [limitations in scope].
+While we tested diverse data types, the scope was limited to the Canterbury Corpus and small custom datasets. The relatively small file sizes (< 1MB) penalize adaptive models, especially high-order Markov and Neural models, which require a "warm-up" period to build accurate probability tables or converge gradients. Initial processing of the file header and early symbols often occurs with a uniform distribution, diluting the overall compression ratio. Evaluation on the Large Corpus or gigabyte-scale datasets would provide clearer insights into the asymptotic behavior of these models.
 
 \subsubsection{Neural Model Training}
 Online training of neural models during compression requires updating weights after every symbol, which is computationally expensive. To make this feasible in MATLAB without hardware acceleration, we truncated Backpropagation Through Time (BPTT) to a single step. While this limits the model's ability to learn long-term dependencies via the gradient signal, the LSTM's cell state still carries historical information forward. This design choice strikes a balance between execution speed and the ability to capture local statistical patterns, though a full BPTT implementation would likely yield higher compression ratios at the cost of significantly increased encoding time.

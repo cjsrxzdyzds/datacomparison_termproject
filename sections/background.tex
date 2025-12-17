@@ -6,7 +6,7 @@ This section establishes the theoretical foundations of data compression, focusi
 \subsection{Information Theoretic Foundations}
 
 \subsubsection{Entropy and Information Content}
-At the core of lossless compression is the concept of \textit{Shannon Entropy}, which quantifies the expected amount of information conveyed by an event. For a discrete random variable $X$ with possible outcomes $x_1, ..., x_n$ occurring with probabilities $P(x_1), ..., P(x_n)$, the entropy $H(X)$ is defined as:
+At the core of lossless compression is the concept of \textit{Shannon Entropy}~\cite{shannon1948mathematical}, which quantifies the expected amount of information conveyed by an event. For a discrete random variable $X$ with possible outcomes $x_1, ..., x_n$ occurring with probabilities $P(x_1), ..., P(x_n)$, the entropy $H(X)$ is defined as:
 \begin{equation}
     H(X) = - \sum_{i=1}^{n} P(x_i) \log_2 P(x_i)
 \end{equation}
@@ -22,7 +22,7 @@ In practical terms, if we encode a source $P$ using a model $Q$, the average num
 \subsection{Mathematical Mechanics of Arithmetic Coding}
 
 \subsubsection{Interval Subdivision}
-Arithmetic coding maps a string of symbols to a sub-interval of $[0, 1)$. Unlike Huffman coding, which is optimal only when symbol probabilities are powers of $1/2$, arithmetic coding is optimal for any probability distribution.
+Arithmetic coding~\cite{rissanen1979arithmetic} maps a string of symbols to a sub-interval of $[0, 1)$. Unlike Huffman coding, which is optimal only when symbol probabilities are powers of $1/2$, arithmetic coding is optimal for any probability distribution.
 Formally, we begin with the current interval $[L_0, H_0) = [0, 1)$. For the $i$-th symbol $s_i$ in a sequence, with estimated probability $p(s_i)$ and cumulative probability $C(s_i) = \sum_{j < s_i} p(j)$, the interval is updated recursively:
 \begin{align}
     \text{Range}_i &= H_{i-1} - L_{i-1} \\
@@ -59,7 +59,7 @@ The error gradient $\delta$ propagates back through time layers. If the spectral
 \end{equation}
 This prevents standard RNNs from learning dependencies longer than ~10 time steps.
 
-\textbf{Long Short-Term Memory (LSTM)} networks solve this by introducing the Constant Error Carousel (CEC). The cell state update equation is additive rather than multiplicative:
+\textbf{Long Short-Term Memory (LSTM)} networks~\cite{hochreiter1997long} solve this by introducing the Constant Error Carousel (CEC). The cell state update equation is additive rather than multiplicative:
 \begin{equation}
     c_t = f_t \odot c_{t-1} + i_t \odot \tilde{c}_t
 \end{equation}
